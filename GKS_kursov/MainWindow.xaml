@@ -4,50 +4,45 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GKS_kursov"
+        xmlns:graphsharp="clr-namespace:GraphSharp.Controls;assembly=GraphSharp.Controls"
+        x:Name="root"
+        xmlns:zoom="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid x:Name="grid1" RenderTransformOrigin="0.485,0.168">
+        Title="MainWindow" Height="450" Width="1120.92">
+
+    <Grid x:Name="gridtop" RenderTransformOrigin="0.485,0.168" HorizontalAlignment="Left" Width="1111">
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MinHeight="39"/>
+            <RowDefinition Height="Auto" MinHeight="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" MinWidth="400" />
-            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" MinWidth="410" />
+            <ColumnDefinition MinWidth="260" Width="Auto"/>
+            <ColumnDefinition MinWidth="360" Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Grid x:Name="grid2" Grid.Row="1" Grid.Column="0" Margin="0,43,10,0">
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="11*" />
-                <ColumnDefinition Width="14*"/>
-            </Grid.ColumnDefinitions>
-
-        </Grid>
-        <Grid x:Name="grid3" Grid.Row="1" Grid.Column="1" Margin="5,27,0,0">
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-
-        </Grid>
         <Button x:Name="buttonLoad"  Grid.Column="0" Content="Загрузить" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="185" Height="23" Click="ButtonLoad_Click"/>
         <Button x:Name="buttonShow"  Grid.Column="0" Content="Посчитать" HorizontalAlignment="Left" Margin="216,6,0,0" VerticalAlignment="Top" Width="184" Height="23" Click="ButtonShow_Click"/>
+        <Button x:Name="buttonCreateGraf"  Grid.Column="1" Content="Создать граф" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" Width="184" Height="23" Click="ButtonCreateGraf_Click"/>
 
-        <GroupBox Header="Вывод данных"  Grid.Column="1"  Grid.Row="1" FontSize="16">
-            <ScrollViewer Grid.Column="1"  Grid.Row="1">
-                <TextBlock  x:Name="tb"  ><InlineUIContainer>
-                   
-                </InlineUIContainer></TextBlock>
-            </ScrollViewer>
-        </GroupBox>
-        <GroupBox Header="Ввод данных"  Grid.Column="0"  Grid.Row="1" FontSize="16">
-            <RichTextBox x:Name="readData"  HorizontalAlignment="Left" Height="340" Margin="10,10,-2,0" VerticalAlignment="Top" Width="390" RenderTransformOrigin="0.5,0.5" >
+        <GroupBox Header="Ввод данных"  Grid.Column="0"  Grid.Row="1" FontSize="14">
+            <RichTextBox x:Name="readData"  HorizontalAlignment="Left" MinHeight="343" Height="Auto" Margin="10,10,-2,0" VerticalAlignment="Top" Width="390" RenderTransformOrigin="0.5,0.5" >
             </RichTextBox>
         </GroupBox>
+
+        <GroupBox Header="Вывод данных"  Grid.Column="1"  Grid.Row="1" Grid.ColumnSpan="2" FontSize="14">
+            <ScrollViewer Grid.Column="1"  Grid.Row="1">
+                <TextBlock  x:Name="tb"  ><InlineUIContainer/><InlineUIContainer>
+                     
+                    </InlineUIContainer></TextBlock>
+            </ScrollViewer>
+        </GroupBox>
+        <GroupBox Grid.Column="2" Grid.Row="1" Header="Вывод графов" Grid.ColumnSpan="2" >
+            <TabControl x:Name="tabControl">              
+            </TabControl>
+        </GroupBox>
+        
     </Grid>
-
-
 </Window>
