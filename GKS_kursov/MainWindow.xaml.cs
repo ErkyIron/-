@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +14,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.IO;
-using Microsoft.Win32;
-
+using QuickGraph;
+using GraphSharp.Controls;
+using GraphX.Controls;
 
 namespace GKS_kursov
 {
@@ -23,9 +25,10 @@ namespace GKS_kursov
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
-        {
-            InitializeComponent();
+        {            
+            InitializeComponent();            
         }
 
         private void ButtonLoad_Click(object sender, RoutedEventArgs e)
@@ -50,14 +53,7 @@ namespace GKS_kursov
 
         private void ButtonShow_Click(object sender, RoutedEventArgs e)
         {
-
-            grid3.ShowGridLines = true;
-
-            int n = 0, k = 0;
-            grid3.Children.Clear();
-            grid3.RowDefinitions.Clear();
-            grid3.ColumnDefinitions.Clear();
-
+            int n = 0;
             tb.Text = "";
 
             string rData = new TextRange(readData.Document.ContentStart,
@@ -207,14 +203,13 @@ namespace GKS_kursov
                 }
                 Array.Resize(ref groups, groups.Length + 1);
                 iterator++;
-               
+
             }
             while (groups[iterator - 1].Count() == 0)
             {
                 Array.Resize(ref groups, groups.Length - 1);
                 iterator--;
             }
-
             #endregion
 
             #region OutGroups
@@ -450,127 +445,127 @@ namespace GKS_kursov
 
             #endregion
 
-            #region Create List Uniq Operation and Graf Matrix
-
-            for (int p = 0; p < new_groups.Length - 1; p++)
-            {
-                List<string>[] uniqueGroupList2 = new List<string>[1];
-
-                for (int iter = 0; iter < new_groups.Length - 1; iter++)
-                {
-                    uniqueGroupList2[iter] = new List<string>();
-                    foreach (int item in new_groups[iter])
-                    {
-
-                        for (int i = 0; i < arr1list.Length; i++)
-                        {
-                            if (item == i)
-                            {
-                                foreach (string elem in arr1list[i])
+          
+            #region Creating Graf Matrix
+            /*
+                        for (int tem = 0; tem < new_groups.Length - 1; tem++)
                                 {
-                                    if ((uniqueGroupList2[iter].FindIndex(x => x == elem) == -1)
-                                        )
+
+                                    int size = uniqueGroupList2[tem].Count() + 1;
+                                    string[,] graf_matrix = new string[size, size];
+                                    int m = 1;
+                                    foreach (string uniq_elem in uniqueGroupList2[tem])
                                     {
-                                        uniqueGroupList2[iter].Add(elem);
+                                        graf_matrix[0, m] = uniq_elem;
+                                        graf_matrix[m, 0] = uniq_elem;
+                                        m++;
                                     }
-                                }
-                            }
-                        }
 
-                    }
-                    Array.Resize(ref uniqueGroupList2, uniqueGroupList2.Length + 1);
-                }
-                if (p == new_groups.Length - 2)
-                {
-                    #region Out operation of uniq group
-                    /* tb.Text += "\n UGroups:";
-                     for (int i = 0; i < uniqueGroupList2.Length - 1; i++)
-                     {
-                         tb.Text += "\n " + i + " - { ";
-                         foreach (var item in uniqueGroupList2[i])
-                         {
-                             tb.Text += (item) + " ";
-                         }
-                         tb.Text += "}";
-                     }
-                     tb.Text += "\n";*/
-                    #endregion
-
-                    #region Creating Graf Matrix
-
-                    for (int tem = 0; tem < new_groups.Length - 1; tem++)
-                    {
-
-                        int size = uniqueGroupList2[tem].Count() + 1;
-                        string[,] graf_matrix = new string[size, size];
-                        int m = 1;
-                        foreach (string uniq_elem in uniqueGroupList2[tem])
-                        {
-                            graf_matrix[0, m] = uniq_elem;
-                            graf_matrix[m, 0] = uniq_elem;
-                            m++;
-                        }
-
-                        foreach (int index in new_groups[tem])
-                        {
-                            string[] arr1Array = arr1list[index].ToArray();
-                            /* Out Uniq operations in groups
-                             for (int l = 0; l < arr1Array.Length; l++)
-                            {
-                                tb.Text += arr1Array[l];
-                            }
-                            tb.Text += "\n";*/
-
-                            for (int l = 0; l < arr1Array.Length - 1; l++)
-                            {
-                                for (m = 1; m < size; m++)
-                                {
-                                    if (arr1Array[l] == graf_matrix[m, 0])
+                                    foreach (int index in new_groups[tem])
                                     {
-                                        int locationI = m;
-                                        for (int m1 = 1; m1 < size; m1++)
+                                        string[] arr1Array = arr1list[index].ToArray();
+
+                                        for (int l = 0; l < arr1Array.Length - 1; l++)
                                         {
-                                            if (arr1Array[l + 1] == graf_matrix[0, m1])
+                                            for (m = 1; m < size; m++)
                                             {
-                                                int locationJ = m1;
-                                                graf_matrix[locationI, locationJ] = "1";
+                                                if (arr1Array[l] == graf_matrix[m, 0])
+                                                {
+                                                    int locationI = m;
+                                                    for (int m1 = 1; m1 < size; m1++)
+                                                    {
+                                                        if (arr1Array[l + 1] == graf_matrix[0, m1])
+                                                        {
+                                                            int locationJ = m1;
+                                                            graf_matrix[locationI, locationJ] = "1";
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }
+
+                                    for (int i = 0; i < size; i++)
+                                    {
+                                        for (int j = 0; j < size; j++)
+                                        {
+                                            if (graf_matrix[i, j] != "1" && i != 0 && j != 0)
+                                                graf_matrix[i, j] = "0";
+                                        }
+                                    }
+
+                                    int[,] graf_matrix_int = new int[size - 1, size - 1];
+                                    for (int i = 0; i < size - 1; i++)
+                                    {
+                                        for (int j = 0; j < size - 1; j++)
+                                        {
+                                            graf_matrix_int[i, j] = Int16.Parse(graf_matrix[i + 1, j + 1]);
+                                        }
+                                    }
+                                    #endregion
+
+                                    #region Out graf matrix
+                                    tb.Text += "\n";
+                                    tb.Text += "\nGraf " + (tem + 1) + "\n";
+                                    PrintStringMatrix(graf_matrix, size);
+                                    // PrintIntMatrix(graf_matrix_int,size-1);
+                                    #endregion
                                 }
+
                             }
-                        }
+                        }*/
+            #endregion
 
-                        for (int i = 0; i < size; i++)
-                        {
-                            for (int j = 0; j < size; j++)
-                            {
-                                if (graf_matrix[i, j] != "1" && i != 0 && j != 0)
-                                    graf_matrix[i, j] = "0";
-                            }
-                        }
+            #region Create Grafs
 
-                        int[,] graf_matrix_int = new int[size - 1, size - 1];
-                        for (int i = 0; i < size - 1; i++)
-                        {
-                            for (int j = 0; j < size - 1; j++)
-                            {
-                                graf_matrix_int[i, j] = Int16.Parse(graf_matrix[i + 1, j + 1]);
-                            }
-                        }
-                        #endregion
+            tabControl.Items.Clear();
+            for (int i = 0; i < new_groups.Length - 1; i++)
+            {
+                var g = new BidirectionalGraph<object, IEdge<object>>();
+                List<string> uniqueOpertionForGroup = FindUniqueOperationInGroup(new_groups[i], arr1list);
+                int cntUniqueOperations = uniqueOpertionForGroup.Count();
 
-                        #region Out graf matrix
-                        tb.Text += "\n";
-                        tb.Text += "\nGraf " + (tem + 1) + "\n";
-                        PrintStringMatrix(graf_matrix, size);
-                        // PrintIntMatrix(graf_matrix_int,size-1);
-                        #endregion
-                    }
-
+                foreach (var operations in uniqueOpertionForGroup)
+                {
+                    g.AddVertex(operations);
                 }
+
+                foreach (var idItem in new_groups[i])
+                {
+                    string[] operations = arr1list[idItem].ToArray();
+                    int countOperations = operations.Length;
+                    for (int j = 1; j < countOperations; j++)
+                    {
+                        g.AddEdge(new Edge<object>(operations[j - 1], operations[j]));
+                    }
+                }
+                
+                GraphLayout gl = new GraphLayout();
+                gl.LayoutAlgorithmType = "FR";               
+                gl.OverlapRemovalAlgorithmType = "FSA";
+               // gl.HighlightAlgorithmType = "Simple";
+                gl.Graph = g;
+
+               /* ZoomControl zc = new ZoomControl();
+                zc.Content = gl;*/
+
+                TabItem ti = new TabItem();
+                ti.Header = "Group" + (i + 1);
+                //ti.Content = zc;
+                ti.Content = gl;
+
+                tabControl.Items.Add(ti);
+                
             }
-            #endregion            
+            #endregion
+
+        }
+
+        private void ButtonCreateGraf_Click(object sender, RoutedEventArgs e)
+        {
+            // CreateGraphToVisualize();     
+            /*  GraphWindow graph = new GraphWindow();
+              graph.Show();*/
         }
 
         public int SumOfAllElemMatrix(int[,] array, int size)
@@ -581,6 +576,7 @@ namespace GKS_kursov
                     sum += array[i, j];
             return sum;
         }
+
         public bool FindElement(List<int>[] array, int size, int findValue)
         {
 
@@ -604,6 +600,7 @@ namespace GKS_kursov
             }
             return 0;
         }
+
         public int PrintStringMatrix(string[,] ArrayMatrix, int sizeMatrix)
         {
 
@@ -618,6 +615,7 @@ namespace GKS_kursov
             }
             return 0;
         }
+
         public int PrintIntMatrix(int[,] ArrayMatrix, int sizeMatrix)
         {
 
@@ -630,6 +628,16 @@ namespace GKS_kursov
                 tb.Text += "\n";
             }
             return 0;
+        }
+
+        public List<string> FindUniqueOperationInGroup(List<int> detailsInGroup, List<string>[] details)
+        {
+            List<string> uniqueOperationList = new List<string>();
+            foreach (var id in detailsInGroup)
+                foreach (var operation in details[id])
+                    if (uniqueOperationList.FindIndex(x => x == operation) == -1)
+                        uniqueOperationList.Add(operation);
+            return uniqueOperationList;
         }
 
     }
