@@ -158,6 +158,7 @@ namespace GKS_kursov
                 int max = 0;
                 List<int> MaxI = new List<int>();
                 List<int> MaxJ = new List<int>();
+
                 for (int i = 0; i < n; i++)
                 {
                     for (int j = 0; j < n; j++)
@@ -206,6 +207,12 @@ namespace GKS_kursov
                 }
                 Array.Resize(ref groups, groups.Length + 1);
                 iterator++;
+               
+            }
+            while (groups[iterator - 1].Count() == 0)
+            {
+                Array.Resize(ref groups, groups.Length - 1);
+                iterator--;
             }
 
             #endregion
@@ -449,10 +456,10 @@ namespace GKS_kursov
             {
                 List<string>[] uniqueGroupList2 = new List<string>[1];
 
-                for (int iter = 0; iter < groups.Length - 1; iter++)
+                for (int iter = 0; iter < new_groups.Length - 1; iter++)
                 {
                     uniqueGroupList2[iter] = new List<string>();
-                    foreach (int item in groups[iter])
+                    foreach (int item in new_groups[iter])
                     {
 
                         for (int i = 0; i < arr1list.Length; i++)
@@ -476,22 +483,22 @@ namespace GKS_kursov
                 if (p == new_groups.Length - 2)
                 {
                     #region Out operation of uniq group
-                    /*tb.Text += "\n UGroups:";
-                    for (int i = 0; i < uniqueGroupList2.Length - 1; i++)
-                    {
-                        tb.Text += "\n " + i + " - { ";
-                        foreach (var item in uniqueGroupList2[i])
-                        {
-                            tb.Text += (item) + " ";
-                        }
-                        tb.Text += "}";
-                    }
-                    tb.Text += "\n";*/
+                    /* tb.Text += "\n UGroups:";
+                     for (int i = 0; i < uniqueGroupList2.Length - 1; i++)
+                     {
+                         tb.Text += "\n " + i + " - { ";
+                         foreach (var item in uniqueGroupList2[i])
+                         {
+                             tb.Text += (item) + " ";
+                         }
+                         tb.Text += "}";
+                     }
+                     tb.Text += "\n";*/
                     #endregion
 
                     #region Creating Graf Matrix
 
-                    for (int tem = 0; tem < uniqueGroupList2.Length - 1; tem++)
+                    for (int tem = 0; tem < new_groups.Length - 1; tem++)
                     {
 
                         int size = uniqueGroupList2[tem].Count() + 1;
@@ -586,16 +593,14 @@ namespace GKS_kursov
 
         public int PrintList(List<int>[] array)
         {
-
             for (int i = 0; i < array.Length - 1; i++)
             {
-                tb.Text += "\n " + i + " - { ";
+                tb.Text += "\n " + (i + 1) + " - { ";
                 foreach (var item in array[i])
                 {
                     tb.Text += (item + 1) + " ";
                 }
                 tb.Text += "}";
-
             }
             return 0;
         }
