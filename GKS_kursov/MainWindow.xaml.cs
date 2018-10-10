@@ -27,8 +27,8 @@ namespace GKS_kursov
     {
 
         public MainWindow()
-        {            
-            InitializeComponent();            
+        {
+            InitializeComponent();
         }
 
         private void ButtonLoad_Click(object sender, RoutedEventArgs e)
@@ -64,7 +64,7 @@ namespace GKS_kursov
             n = listOperation.Count();
 
             List<string>[] arr1list = new List<string>[n];
-            for (int i = 0; i < arr1list.Length - 1; i++)
+            for (int i = 0; i < arr1list.Length-1; i++)
             {
                 arr1list[i] = new List<string>();
             }
@@ -205,9 +205,9 @@ namespace GKS_kursov
                 iterator++;
 
             }
-            while (groups[iterator - 1].Count() == 0)
+            while (groups[iterator] == null || groups[iterator].Count() == 0)
             {
-                Array.Resize(ref groups, groups.Length - 1);
+                Array.Resize(ref groups, groups.Length-1);
                 iterator--;
             }
             #endregion
@@ -218,49 +218,8 @@ namespace GKS_kursov
             PrintList(groups);
             #endregion
 
-            for (int q = 0; q < groups.Length - 1; q++)
+            for (int q = 0; q < groups.Length ; q++)
             {
-                #region CreateGroupList
-                List<string>[] uniqueGroupList = new List<string>[1];
-
-                for (int iter = 0; iter < groups.Length - 1; iter++)
-                {
-                    uniqueGroupList[iter] = new List<string>();
-                    foreach (int item in groups[iter])
-                    {
-
-                        for (int i = 0; i < arr1list.Length; i++)
-                        {
-                            if (item == i)
-                            {
-                                foreach (string elem in arr1list[i])
-                                {
-                                    if ((uniqueGroupList[iter].FindIndex(x => x == elem) == -1)
-                                        )
-                                    {
-                                        uniqueGroupList[iter].Add(elem);
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    Array.Resize(ref uniqueGroupList, uniqueGroupList.Length + 1);
-                }
-                #endregion
-
-                #region OutGroupList
-                /* tb.Text += "\n UGroups:";
-                 for (int i = 0; i < uniqueGroupList.Length - 1; i++)
-                 {
-                     tb.Text += "\n " + i + " - { ";
-                     foreach (var item in uniqueGroupList[i])
-                     {
-                         tb.Text += (item) + " ";
-                     }
-                     tb.Text += "}";
-                 }*/
-                #endregion
 
                 #region Sort groups
 
@@ -268,7 +227,7 @@ namespace GKS_kursov
                 List<string> uniqGroup = new List<string>();
                 List<int> id_repeat_group = new List<int>();
 
-                for (int t = q; t < groups.Length - 1; t++)
+                for (int t = q; t < groups.Length -1; t++)
                 {
                     List<string> temp_list = new List<string>();
 
@@ -305,7 +264,7 @@ namespace GKS_kursov
                     int id_max_group = 0;
                     int max_count_deteils = 0;
 
-                    for (int t = 0; t < groups.Length - 1; t++)
+                    for (int t = 0; t < groups.Length-1; t++)
                     {
                         int count_details = 0;
                         if (t >= 1)
@@ -360,7 +319,7 @@ namespace GKS_kursov
                 #region Out Sort Groups
                 /*
                  tb.Text += "\n SortGroups:";
-                 for (int i = 0; i < groups.Length - 1; i++)
+                 for (int i = 0; i < groups.Length; i++)
                  {
                      tb.Text += "\n " + i + " - { ";
                      foreach (var item in groups[i])
@@ -373,7 +332,7 @@ namespace GKS_kursov
 
                 #region Update Groups
 
-                for (int t = 0; t < groups.Length - 1; t++)
+                for (int t = 0; t < groups.Length-1; t++)
                 {
                     if (t >= 1)
                     {
@@ -411,7 +370,7 @@ namespace GKS_kursov
 
                 #region Out Update Groups
                 /* tb.Text += "\n Update Groups:";
-                 for (int i = 0; i < groups.Length - 1; i++)
+                 for (int i = 0; i < groups.Length; i++)
                  {
                      tb.Text += "\n " + i + " - { ";
                      foreach (var item in groups[i])
@@ -426,7 +385,7 @@ namespace GKS_kursov
             #region Uniq New Group
             List<int>[] new_groups = new List<int>[1];
             int iteration = 0;
-            for (int i = 0; i < groups.Length - 1; i++)
+            for (int i = 0; i < groups.Length; i++)
             {
                 if (groups[i].Count() != 0)
                 {
@@ -436,6 +395,7 @@ namespace GKS_kursov
                 }
 
             }
+            Array.Resize(ref new_groups, new_groups.Length - 1);
             #endregion
 
             #region Out Ytoch Groups
@@ -445,83 +405,122 @@ namespace GKS_kursov
 
             #endregion
 
-          
-            #region Creating Graf Matrix
-            /*
-                        for (int tem = 0; tem < new_groups.Length - 1; tem++)
+            #region Create Unique Operations List
+
+            List<string>[] uniqueGroupList = new List<string>[1];
+
+            for (int p = 0; p < new_groups.Length; p++)
+            {
+                for (int iter = 0; iter < new_groups.Length; iter++)
+                {
+                    uniqueGroupList[iter] = new List<string>();
+
+                    foreach (int item in new_groups[iter])
+                    {
+
+                        for (int i = 0; i < arr1list.Length; i++)
+                        {
+                            if (item == i)
+                            {
+                                foreach (string elem in arr1list[i])
                                 {
-
-                                    int size = uniqueGroupList2[tem].Count() + 1;
-                                    string[,] graf_matrix = new string[size, size];
-                                    int m = 1;
-                                    foreach (string uniq_elem in uniqueGroupList2[tem])
+                                    if ((uniqueGroupList[iter].FindIndex(x => x == elem) == -1)
+                                        )
                                     {
-                                        graf_matrix[0, m] = uniq_elem;
-                                        graf_matrix[m, 0] = uniq_elem;
-                                        m++;
+                                        uniqueGroupList[iter].Add(elem);
+
                                     }
-
-                                    foreach (int index in new_groups[tem])
-                                    {
-                                        string[] arr1Array = arr1list[index].ToArray();
-
-                                        for (int l = 0; l < arr1Array.Length - 1; l++)
-                                        {
-                                            for (m = 1; m < size; m++)
-                                            {
-                                                if (arr1Array[l] == graf_matrix[m, 0])
-                                                {
-                                                    int locationI = m;
-                                                    for (int m1 = 1; m1 < size; m1++)
-                                                    {
-                                                        if (arr1Array[l + 1] == graf_matrix[0, m1])
-                                                        {
-                                                            int locationJ = m1;
-                                                            graf_matrix[locationI, locationJ] = "1";
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    for (int i = 0; i < size; i++)
-                                    {
-                                        for (int j = 0; j < size; j++)
-                                        {
-                                            if (graf_matrix[i, j] != "1" && i != 0 && j != 0)
-                                                graf_matrix[i, j] = "0";
-                                        }
-                                    }
-
-                                    int[,] graf_matrix_int = new int[size - 1, size - 1];
-                                    for (int i = 0; i < size - 1; i++)
-                                    {
-                                        for (int j = 0; j < size - 1; j++)
-                                        {
-                                            graf_matrix_int[i, j] = Int16.Parse(graf_matrix[i + 1, j + 1]);
-                                        }
-                                    }
-                                    #endregion
-
-                                    #region Out graf matrix
-                                    tb.Text += "\n";
-                                    tb.Text += "\nGraf " + (tem + 1) + "\n";
-                                    PrintStringMatrix(graf_matrix, size);
-                                    // PrintIntMatrix(graf_matrix_int,size-1);
-                                    #endregion
                                 }
-
                             }
-                        }*/
+                        }
+
+                    }
+
+                    Array.Resize(ref uniqueGroupList, uniqueGroupList.Length + 1);
+                }
+            }
+
+            #endregion
+
+            #region Creating Graf Matrix
+
+            List<int[,]> listOfAdjacencyMatrix = new List<int[,]>();
+
+            for (int tem = 0; tem < new_groups.Length; tem++)
+            {
+
+                int size = uniqueGroupList[tem].Count() + 1;
+                string[,] graf_matrix = new string[size, size];
+                int m = 1;
+                foreach (string uniq_elem in uniqueGroupList[tem])
+                {
+                    graf_matrix[0, m] = uniq_elem;
+                    graf_matrix[m, 0] = uniq_elem;
+                    m++;
+                }
+
+                foreach (int index in new_groups[tem])
+                {
+                    string[] arr1Array = arr1list[index].ToArray();
+
+                    for (int l = 0; l < arr1Array.Length-1; l++)
+                    {
+                        for (m = 1; m < size; m++)
+                        {
+                            if (arr1Array[l] == graf_matrix[m, 0])
+                            {
+                                int locationI = m;
+                                for (int m1 = 1; m1 < size; m1++)
+                                {
+                                    if (arr1Array[l + 1] == graf_matrix[0, m1])
+                                    {
+                                        int locationJ = m1;
+                                        graf_matrix[locationI, locationJ] = "1";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        if (graf_matrix[i, j] != "1" && i != 0 && j != 0)
+                            graf_matrix[i, j] = "0";
+                    }
+                }
+
+
+                int[,] adjacencyMatrix = new int[size - 1, size - 1];
+                for (int i = 0; i < size - 1; i++)
+                {
+                    for (int j = 0; j < size - 1; j++)
+                    {
+                        adjacencyMatrix[i, j] = Int16.Parse(graf_matrix[i + 1, j + 1]);
+                    }
+                }
+                listOfAdjacencyMatrix.Add(adjacencyMatrix);
+                #endregion
+
+                #region Out graf matrix
+                tb.Text += "\n";
+                tb.Text += "\nGraf " + (tem + 1) + "\n";
+                PrintStringMatrix(graf_matrix, size);
+                // PrintIntMatrix(graf_matrix_int,size-1);
+            }
             #endregion
 
             #region Create Grafs
 
             tabControl.Items.Clear();
-            for (int i = 0; i < new_groups.Length - 1; i++)
+
+            for (int i = 0; i < new_groups.Length; i++)
             {
                 var g = new BidirectionalGraph<object, IEdge<object>>();
+                var g2 = new BidirectionalGraph<object, IEdge<object>>();
+
                 List<string> uniqueOpertionForGroup = FindUniqueOperationInGroup(new_groups[i], arr1list);
                 int cntUniqueOperations = uniqueOpertionForGroup.Count();
 
@@ -539,15 +538,16 @@ namespace GKS_kursov
                         g.AddEdge(new Edge<object>(operations[j - 1], operations[j]));
                     }
                 }
-                
+
                 GraphLayout gl = new GraphLayout();
-                gl.LayoutAlgorithmType = "FR";               
+
+                gl.LayoutAlgorithmType = "KK"; //"FR"
                 gl.OverlapRemovalAlgorithmType = "FSA";
-               // gl.HighlightAlgorithmType = "Simple";
+                // gl.HighlightAlgorithmType = "Simple";
                 gl.Graph = g;
 
-               /* ZoomControl zc = new ZoomControl();
-                zc.Content = gl;*/
+                //ZoomControl zc = new ZoomControl();
+                //zc.Content = gl;
 
                 TabItem ti = new TabItem();
                 ti.Header = "Group" + (i + 1);
@@ -555,10 +555,113 @@ namespace GKS_kursov
                 ti.Content = gl;
 
                 tabControl.Items.Add(ti);
-                
+            }
+
+            #endregion
+
+            #region Create Models
+
+            List<List<string>>[] arrayOfGroupModels = new List<List<string>>[new_groups.Length];
+
+            for (int i = 0; i < new_groups.Length; i++)
+            {
+                List<string> uniqueOpeationInGroup = FindUniqueOperationInGroup(new_groups[i], arr1list);
+                List<List<string>> listOfModels = new List<List<string>>();
+                for (int j = 0; j < uniqueOpeationInGroup.Count; j++)
+                {
+                    List<string> model = new List<string>();
+                    model.Add(uniqueOpeationInGroup[j]);
+                    listOfModels.Add(model);
+                }
+                arrayOfGroupModels[i] = listOfModels;
+            }
+
+            PrintModel(arrayOfGroupModels);
+            #endregion
+
+            #region Marging Models        
+
+            #region feedback check
+            bool checkFeedback = false;
+
+            for (int i = 0; i < new_groups.Length; i++)
+            {
+                int[,] currentAndjancencyMatrix = CreateAdjacencyMatrixToModel(arrayOfGroupModels[i], listOfAdjacencyMatrix[i], FindUniqueOperationInGroup(new_groups[i], arr1list));
+
+                #region Print Andjancency Matrix To Group
+                /*
+                tbOut.Text += "Group" + (i + 1) + "\n";
+                for (int z = 0; z < currentAndjancencyMatrix.GetLength(0); z++)
+                {
+                    for (int x = 0; x < currentAndjancencyMatrix.GetLength(1); x++)
+                        tbOut.Text += currentAndjancencyMatrix[z, x] + " ";
+                    tbOut.Text += "\n";
+                }
+                */
+                #endregion
+
+                for (int r = 0; r < currentAndjancencyMatrix.GetLength(0) && !checkFeedback; r++)
+                    for (int c = 0; c < currentAndjancencyMatrix.GetLength(0) && !checkFeedback; c++)
+                    {
+                        if (currentAndjancencyMatrix[r, c] == 1
+                            && currentAndjancencyMatrix[c, r] == 1
+                            && c != r)
+                        {
+                            MergeModel(ref arrayOfGroupModels[i], r, c);
+                            while (arrayOfGroupModels[i][c].Count > 0)
+                                arrayOfGroupModels[i].Remove(arrayOfGroupModels[i][c]);
+                            checkFeedback = true;
+                        }
+                    }
+
+                if (checkFeedback)
+                {
+                    i = -1;
+                    checkFeedback = false;
+                }
             }
             #endregion
 
+            //PrintModel(arrayOfGroupModels);
+
+            #region circuit check
+
+            bool checkCircuit = false;
+
+            for (int i = 0; i < new_groups.Length; i++)
+            {
+                int[,] currentAndjancencyMatrix = CreateAdjacencyMatrixToModel(arrayOfGroupModels[i], listOfAdjacencyMatrix[i], FindUniqueOperationInGroup(new_groups[i], arr1list));
+
+                for (int r = 0; r < currentAndjancencyMatrix.GetLength(0) && !checkCircuit; r++)
+                    for (int c = 0; c < currentAndjancencyMatrix.GetLength(0) && !checkCircuit; c++)
+                    {
+                        if (currentAndjancencyMatrix[r, c] == 1)
+                        {
+                            List<int> usedIndex = new List<int>();
+                            usedIndex.Add(c);
+                            checkCircuit = CheckCircuit(ref arrayOfGroupModels[i], currentAndjancencyMatrix, usedIndex, r);
+
+                            if (checkCircuit)
+                            {
+                                MergeModel(ref arrayOfGroupModels[i], r, c);
+                                arrayOfGroupModels[i].RemoveAll(x => x.Count == 0);
+                            }
+
+                        }
+                    }
+
+                if (checkCircuit)
+                {
+                    checkCircuit = false;
+                    i = -1;
+                }
+            }
+            #endregion
+
+            tb.Text += "\nMerge Models\n";
+            PrintModel(arrayOfGroupModels);
+
+            #endregion
         }
 
         private void ButtonCreateGraf_Click(object sender, RoutedEventArgs e)
@@ -577,6 +680,14 @@ namespace GKS_kursov
             return sum;
         }
 
+        public int SumOfAllElementsInRow(int[,] ajdencecyMatrix, int row)
+        {
+            int sum = 0;
+            for (int i = 0; i < ajdencecyMatrix.GetLength(1); i++)
+                sum += ajdencecyMatrix[row, i];
+            return sum;
+        }
+
         public bool FindElement(List<int>[] array, int size, int findValue)
         {
 
@@ -589,7 +700,7 @@ namespace GKS_kursov
 
         public int PrintList(List<int>[] array)
         {
-            for (int i = 0; i < array.Length - 1; i++)
+            for (int i = 0; i < array.Length; i++)
             {
                 tb.Text += "\n " + (i + 1) + " - { ";
                 foreach (var item in array[i])
@@ -640,5 +751,80 @@ namespace GKS_kursov
             return uniqueOperationList;
         }
 
+        public void PrintModel(List<List<string>>[] arrayOfGroupModels)
+        {
+            for (int i = 0; i < arrayOfGroupModels.Length; i++)
+            {
+                tb.Text += "\nModels of " + (i + 1) + " group\n";
+                for (int p = 0; p < arrayOfGroupModels[i].Count; p++)
+                {
+                    tb.Text += "Model " + (p + 1) + ": { ";
+                    foreach (var operation in arrayOfGroupModels[i][p])
+                        tb.Text += operation + " ";
+                    tb.Text += "}\n";
+                }
+            }
+        }
+
+        public int[,] CreateAdjacencyMatrixToModel(List<List<string>> listOfModels, int[,] adjacencyMatrix, List<string> uniqueOperationInGroup)
+        {
+            int[,] adjacencyMatrixToModel = new int[listOfModels.Count, listOfModels.Count];
+            //выбор модели
+            for (int i = 0; i < listOfModels.Count; i++)
+                //выбор операции
+                for (int j = 0; j < listOfModels[i].Count; j++)
+                {
+                    int indexInAdjacencyMatrix = uniqueOperationInGroup.FindIndex(x => x == listOfModels[i][j]);
+                    for (int iam = 0; iam < adjacencyMatrix.GetLength(0); iam++)
+                    {
+                        var currentUniqueValue = uniqueOperationInGroup[iam];
+                        if (adjacencyMatrix[indexInAdjacencyMatrix, iam] == 1
+                            && listOfModels[i].FindIndex(x => x == currentUniqueValue) == -1)
+                        {
+                            int indexModel = -1;
+                            foreach (var model in listOfModels)
+                                if (model.FindIndex(x => x == currentUniqueValue) != -1)
+                                    indexModel = listOfModels.FindIndex(x => x == model);
+                            adjacencyMatrixToModel[i, indexModel] = 1;
+                        }
+                    }
+
+                }
+            return adjacencyMatrixToModel;
+        }
+
+        public void MergeModel(ref List<List<string>> listOfModel, int indexToWrite, int indexToRemove)
+        {
+            while (listOfModel[indexToRemove].Count > 0)
+            {
+                listOfModel[indexToWrite].Add(listOfModel[indexToRemove].First());
+                listOfModel[indexToRemove].Remove(listOfModel[indexToRemove].First());
+            }
+        }
+
+        public bool CheckCircuit(ref List<List<string>> listOfModel, int[,] currentAndjancencyMatrix, List<int> usedIndexList, int mainIndex)
+        {
+            int indexOfParent = usedIndexList.Last();
+            if (SumOfAllElementsInRow(currentAndjancencyMatrix, indexOfParent) > 1) return false;
+
+            for (int i = 0; i < currentAndjancencyMatrix.GetLength(0); i++)
+            {
+                if (currentAndjancencyMatrix[indexOfParent, i] == 1)
+                {
+                    if (currentAndjancencyMatrix[mainIndex, i] == 1)
+                    {
+                        MergeModel(ref listOfModel, indexOfParent, i);
+                        return true;
+                    }
+                    else
+                    {
+                        usedIndexList.Add(i);
+                        CheckCircuit(ref listOfModel, currentAndjancencyMatrix, usedIndexList, mainIndex);
+                    }
+                }
+
+            }
+            return false;
+        }
     }
 }

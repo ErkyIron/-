@@ -1,0 +1,6 @@
+t1 t2 t3 c1 c2
+t2 t1 t3 c2
+t3 t1 c3
+t4 t5 c4 f1
+t5 t4 f1
+t1 t5 t4 f1
