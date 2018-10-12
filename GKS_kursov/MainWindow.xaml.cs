@@ -602,7 +602,8 @@ namespace GKS_kursov
 
                             if (checkCircuit)
                             {
-                                MergeModel(ref arrayOfGroupModels[i], r, c);
+                                if ((arrayOfGroupModels[i][r].Count + arrayOfGroupModels[i][c].Count) <= 5)
+                                    MergeModel(ref arrayOfGroupModels[i], r, c);
                                 arrayOfGroupModels[i].RemoveAll(x => x.Count == 0);
                             }
 
@@ -637,7 +638,8 @@ namespace GKS_kursov
 
                             if (circleCheck)
                             {
-                                MergeModel(ref arrayOfGroupModels[i], r, c);
+                                if ((arrayOfGroupModels[i][r].Count + arrayOfGroupModels[i][c].Count) <= 5)
+                                    MergeModel(ref arrayOfGroupModels[i], r, c);
                                 arrayOfGroupModels[i].RemoveAll(x => x.Count == 0);
                             }
 
@@ -817,8 +819,11 @@ namespace GKS_kursov
                         usedIndexList.Add(i);
                         if (CheckCircuit(ref listOfModel, currentAndjancencyMatrix, usedIndexList, mainIndex))
                         {
-                            MergeModel(ref listOfModel, indexOfParent, i);
-                            return true;
+                            if ((listOfModel[indexOfParent].Count + listOfModel[i].Count) <= 5)
+                            {
+                                MergeModel(ref listOfModel, indexOfParent, i);
+                                return true;
+                            }
                         }
                     }
                 }
@@ -846,8 +851,11 @@ namespace GKS_kursov
                         usedIndexList.Add(i);
                         if (CheckCirlce(ref listOfModel, currentAndjancencyMatrix, usedIndexList, mainIndex))
                         {
-                            MergeModel(ref listOfModel, indexOfParent, i);
-                            return true;
+                            if ((listOfModel[indexOfParent].Count + listOfModel[i].Count) <= 5)
+                            {
+                                MergeModel(ref listOfModel, indexOfParent, i);
+                                return true;
+                            }
                         }
                     }
                 }
