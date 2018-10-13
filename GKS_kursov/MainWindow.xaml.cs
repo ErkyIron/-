@@ -658,7 +658,6 @@ namespace GKS_kursov
             tb.Text += "\nMerge Models\n";
             PrintModel(arrayOfGroupModels);
 
-
             #endregion
         }
 
@@ -811,10 +810,13 @@ namespace GKS_kursov
                 {
                     if (currentAndjancencyMatrix[mainIndex, i] == 1)
                     {
-                        MergeModel(ref listOfModel, indexOfParent, i);
-                        return true;
+                        if ((listOfModel[indexOfParent].Count + listOfModel[i].Count) <= 5)
+                        {
+                            MergeModel(ref listOfModel, indexOfParent, i);
+                            return true;
+                        }
                     }
-                    else if(usedIndexList.FindIndex(x => x == i) == -1)
+                    else if (usedIndexList.FindIndex(x => x == i) == -1)
                     {
                         usedIndexList.Add(i);
                         if (CheckCircuit(ref listOfModel, currentAndjancencyMatrix, usedIndexList, mainIndex))
@@ -843,8 +845,11 @@ namespace GKS_kursov
                 {
                     if (currentAndjancencyMatrix[i, mainIndex] == 1)
                     {
-                        MergeModel(ref listOfModel, indexOfParent, i);
-                        return true;
+                        if ((listOfModel[indexOfParent].Count + listOfModel[i].Count) <= 5)
+                        {
+                            MergeModel(ref listOfModel, indexOfParent, i);
+                            return true;
+                        }
                     }
                     else if (usedIndexList.FindIndex(x => x == i) == -1)
                     {
