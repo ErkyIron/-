@@ -383,7 +383,7 @@ namespace GKS_kursov
                 #endregion
 
             }
-           
+
             #region Uniq New Group
             List<int>[] new_groups = new List<int>[1];
             int iteration = 0;
@@ -578,7 +578,7 @@ namespace GKS_kursov
                 arrayOfGroupModels[i] = listOfModels;
             }
 
-           // PrintArrayOfModels(arrayOfGroupModels);
+            // PrintArrayOfModels(arrayOfGroupModels);
             #endregion
 
             #region Marging Models        
@@ -590,7 +590,7 @@ namespace GKS_kursov
             {
                 circleCheck = false;
                 checkCircuit = false;
-                
+
                 #region circuit check
 
                 for (int i = 0; i < new_groups.Length; i++)
@@ -733,8 +733,8 @@ namespace GKS_kursov
             tb.Text += "\nFirst Modul order:\n";
             for (int i = 0; i < listOfClarifyingModel.Count; i++)
                 tb.Text += "M" + (i + 1) + " ";
-           
-            #region Optimal Permutation
+
+            #region Optimal Permutation            
 
             List<int> listOfModelIndex = new List<int>();
             for (int i = 0; i < listOfClarifyingModel.Count; i++)
@@ -742,9 +742,10 @@ namespace GKS_kursov
 
             List<IEnumerable<int>> listOfAllPermutations = GetPermutations(listOfModelIndex, listOfModelIndex.Count).ToList();
 
+
             int minCntFeedback = listOfModelIndex.Count;
-            int indexOfOptimalPermutation = 0;
-            int cntOptimalPermutation = 0;
+            List<int> indexOfOptimalPermutation = new List<int> { 0 };
+
 
             for (int j = 0; j < listOfAllPermutations.Count; j++)
             {
@@ -773,23 +774,48 @@ namespace GKS_kursov
                 }
                 if (cntFeedBack < minCntFeedback)
                 {
-                    indexOfOptimalPermutation = j;
+                    indexOfOptimalPermutation.Clear();
+                    indexOfOptimalPermutation.Add(j);
                     minCntFeedback = cntFeedBack;
-                    cntOptimalPermutation = 1;
                 }
-                if (cntFeedBack == minCntFeedback)
-                    cntOptimalPermutation++;
+                else if (cntFeedBack == minCntFeedback)
+                    indexOfOptimalPermutation.Add(j);
                 listOfFeedback.Clear();
             }
 
+            int optimal = 0;
+            if (indexOfOptimalPermutation.Count > 0)
+            {
+                int maxCntFirstModel = 0;
+
+                foreach (var index in indexOfOptimalPermutation)
+                {
+                    List<int> currentPermition = listOfAllPermutations[index].ToList();
+                    int cntFirstModel = 0;
+                    foreach (var item in arr1list)
+                    {
+                        if (listOfClarifyingModel[currentPermition[0]].FindIndex(x => x == item[0]) != -1)
+                            cntFirstModel++;
+
+                    }
+                    if (cntFirstModel > maxCntFirstModel)
+                    {
+                        maxCntFirstModel = cntFirstModel;
+                        optimal = index;
+                    }
+                }
+            }
+
             #endregion
-            
-            tb.Text += "\n\nOptimal permutation:\n";
-            foreach (var index in listOfAllPermutations[indexOfOptimalPermutation])
+
+            tb.Text += "\nOptimal permutation:\n";
+            foreach (var index in listOfAllPermutations[optimal])
                 tb.Text += "M" + (index + 1) + " ";
-           /* tb.Text += "\nCount feedback: " + minCntFeedback;
-            if (cntOptimalPermutation > 0)
-                tb.Text += "\nCount optimal permutation: " + cntOptimalPermutation;*/
+            tb.Text += "\nCount feedback: " + minCntFeedback;
+            if (indexOfOptimalPermutation.Count > 0)
+                tb.Text += "\nCount optimal permutation: " + indexOfOptimalPermutation.Count;
+
+           
         }
 
         private void ButtonCreateGraf_Click(object sender, RoutedEventArgs e)
